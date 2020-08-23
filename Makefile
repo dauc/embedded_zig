@@ -2,7 +2,7 @@
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
 
-BUILD_FLAGS = --release-small -target thumbv7m-freestanding-none
+BUILD_FLAGS = --release-small -target thumb-freestanding -mcpu cortex_m3
 LINKER_SCRIPT = arm_cm3.ld
 LD_FLAGS = --gc-sections -nostdlib
 OBJS = startup.o main.o
