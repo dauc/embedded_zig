@@ -1,0 +1,17 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: install zig
+      run: curl -Ls https://github.com/ziglang/zig/releases/download/0.7.1/zig-linux-x86_64-0.7.1.tar.xz | tar xJ -C ${HOME}
+    - name: append path
+      run: echo "${HOME}/zig-linux-x86_64-0.7.1" >> $GITHUB_PATH
+    - name: build
+      run: make
