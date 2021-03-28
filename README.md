@@ -1,3 +1,5 @@
+test
+
 # embedded_zig
 
 A "minimal" ARM cortex-M firmware in Zig running on a STM32F103. It blinks.
