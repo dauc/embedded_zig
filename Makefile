@@ -11,8 +11,11 @@ PROG = firmware
 %.o: %.zig
 	zig build-obj ${BUILD_FLAGS} $<
 
-${PROG}: ${OBJS}
-	zig build-exe ${BUILD_FLAGS} $(OBJS:%=%) --name $@.elf --script ${LINKER_SCRIPT}
+${PROG}.hex: ${PROG}.elf
+	arm-none-eabi-objcopy -O ihex $< $@
+
+${PROG}.elf: ${OBJS}
+	zig build-exe ${BUILD_FLAGS} $(OBJS:%=%) --name $@ --script ${LINKER_SCRIPT}
 #	arm-none-eabi-ld ${OBJS} -o $@.elf -T ${LINKER_SCRIPT} -Map $@.map ${LD_FLAGS}
 
 clean:
