@@ -3,3 +3,8 @@
 *.h
 *.map
 zig-cache
+*.svd
+STM32F103xx.zig
+
+# Ignore the whole svd2zig dir.
+svd2zig
