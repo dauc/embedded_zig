@@ -1,4 +1,5 @@
 usingnamespace @import("core_cm3.zig");
+const stm32 = @import("STM32F103xx.zig");
 
 const FLASH_BASE: u32 = 0x08000000;
 const VECT_TAB_OFFSET = 0x0;
@@ -68,6 +69,7 @@ const FLASH_t = packed struct {
 
 pub const GPIOC = @intToPtr(*volatile GPIO_t, GPIOC_BASE);
 pub const RCC = @intToPtr(*volatile RCC_t, RCC_BASE);
+// pub const FLASH = @intToPtr(*volatile FLASH_t, FLASH_Base_Address);
 pub const FLASH = @intToPtr(*volatile FLASH_t, FLASH_R_BASE);
 
 // copied verbatim from STM32 SDK
@@ -75,10 +77,11 @@ pub fn SystemInit() void {
     //* Reset the RCC clock configuration to the default reset state(for debug purpose) */
     //* Set HSION bit */
     RCC.*.CR |= @as(u32, 0x00000001);
-
+    // stm32.RCC_CR_Ptr.* |= stm32.RCC_CR_HSION(1);
 
     //* Reset SW, HPRE, PPRE1, PPRE2, ADCPRE and MCO bits */
     RCC.*.CFGR &= @as(u32, 0xF8FF0000);
+    // stm32.RCC_CFGR_Ptr.* &= stm32.RCC_CFGR_SW_Mask | stm32.RCC_CFGR_HPRE_Mask | stm32.RCC_CFGR_PPRE1_Mask | stm32.RCC_CFGR_PPRE2_Mask | stm32.RCC_CFGR_ADCPRE_Mask | stm32.RCC_CFGR_MCO_Mask;
 
     //* Reset HSEON, CSSON and PLLON bits */
     RCC.*.CR &= @as(u32, 0xFEF6FFFF);
@@ -123,9 +126,11 @@ fn SetSysClock() void {
 
     if (HSEStatus == 0x01) {
         //* Enable Prefetch Buffer */
+        // stm32.FLASH_ACR_Ptr.* |= stm32.FLASH_ACR_PRFTBE(1);
         FLASH.*.ACR |= @as(u32, FLASH_ACR_PRFTBE);
 
         //* Flash 2 wait state */
+        // stm32.FLASH_ACR_Ptr.* |= stm32.FLASH_ACR_LATENCY(2);
         FLASH.*.ACR &= @as(u32, ~FLASH_ACR_LATENCY);
         FLASH.*.ACR |= @as(u32, FLASH_ACR_LATENCY_2);
 
